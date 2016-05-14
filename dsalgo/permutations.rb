@@ -19,9 +19,44 @@ def do_perm(array,start,last)
 	end
 end
 
+
+def print_permutation(array,already_selected_index_array)
+	already_selected_index_array.each do |index|
+		print array[index]
+	end
+	puts
+end
+
+#generic approach
+def select_char(array,already_selected_index_array)
+	if array.size == already_selected_index_array.size
+		print_permutation(array,already_selected_index_array)
+	else
+		full_index_array = (0..(array.size - 1)).to_a
+		available_indexes = full_index_array - already_selected_index_array
+		available_indexes.each do |index|
+			already_selected_index_array.push index
+			select_char(array,already_selected_index_array)
+			already_selected_index_array.pop
+		end
+	end
+end
+
 def perm_wrapper(array)
 	start = 0
 	last = array.size - 1
-	puts do_perm(array,start,last)
+	#memory intensive non generic method 
+	#puts do_perm(array,start,last)
+	#generic method 
+	already_selected_index_array = []
+	select_char(array,already_selected_index_array)
 end
-perm_wrapper(['s','u','k','k','i'])
+perm_wrapper(['a','b','c'])
+
+
+
+
+
+
+
+
