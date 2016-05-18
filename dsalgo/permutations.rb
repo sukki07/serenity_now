@@ -52,11 +52,3 @@ def perm_wrapper(array)
 	select_char(array,already_selected_index_array)
 end
 perm_wrapper(['a','b','c'])
-
-
-
-
-
-
-
-
