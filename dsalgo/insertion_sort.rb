@@ -1,5 +1,3 @@
-
-
 def find_where_the_value_under_question_should_be_inserted(index_under_question,value_under_question,array)
 	for i in 0..(index_under_question - 1)
 		if value_under_question < array[i]
