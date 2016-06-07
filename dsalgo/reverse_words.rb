@@ -61,13 +61,12 @@ def reverse_array_in_place(array,start_index,end_index)
 	end
 end
 
-def reverse_words_without_buffer
-	string = "  hello,  hi.. i...  .lskdjf masdjfl;ksadhf ,,kk    how are    you   "
-	orig_arr = []
-	for i in 0...string.size do 
-		orig_arr.push string[i]
-	end
+def reverse_words_without_buffer(string)
+	orig_arr = string.split("")
 	reverse_array_in_place(orig_arr,0,orig_arr.length-1)
+	return orig_arr.join
 
 end
-reverse_words_without_buffer
+string = "  hello,  hi.. i...  .lskdjf masdjfl;ksadhf ,,kk    how are    you   "
+string1 = reverse_words_without_buffer(string)
+puts string1

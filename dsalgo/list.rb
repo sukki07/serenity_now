@@ -6,6 +6,14 @@ class List
 		@tail = nil
 	end	
 
+
+	def create_list_of_size(length)
+		for i in 1..length
+			add_at_end(i)
+		end
+		return @head
+	end
+
 	def add_at_beginning(data)
 		node = Node.new(data)
 		if @head.eql?nil
@@ -67,7 +75,6 @@ class List
 			current = current.next
 		end
 	end
-
 
 	def mth_to_last(m)
 		#m = 0 means last

@@ -47,7 +47,8 @@ def perm_wrapper(array)
 	last = array.size - 1
 	#memory intensive non generic method 
 	#puts do_perm(array,start,last)
-	#generic method 
+
+	#generic method  slightly better
 	already_selected_index_array = []
 	select_char(array,already_selected_index_array)
 end
