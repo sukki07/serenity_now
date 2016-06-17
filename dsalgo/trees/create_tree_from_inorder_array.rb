@@ -1,4 +1,4 @@
-require './btnode.rb'
+require './bstree.rb'
 
 def move_right(subtree_node,subtree_node_index,begin_subtree_index,end_subtree_index)
 	right_subtree_begin  = subtree_node_index + 1
@@ -49,47 +49,6 @@ def preorder(node)
 	end
 end
 
-def level_order(queue,depth)
-	level_nodes = []
-	justify = 100 - (2**(depth))
-	while(not queue.empty?)
-		node = queue.pop
-		level_nodes.unshift node
-	end
-	print " "*justify
-	level_nodes.each do |node| 
-		print node.data
-		print " "
-	end
-	level_nodes.each do |node|
-		if node.data == "X"
-			next
-		end
-		if node.left
-			queue.push node.left  
-		else
-			nil_node = Btnode.new("X")
-			queue.push nil_node 
-		end
-		if node.right
-			queue.push node.right  
-		else
-			nil_node = Btnode.new("X")
-			queue.push nil_node 
-		end
-	end
-end
-def level_order_w(node)
-	queue = []
-	queue.push node
-	depth = 0
-	while (not queue.empty?)
-		puts
-		level_order(queue,depth)
-		depth+=1
-	end
-end
-
 def lo(node)
 	queue = []
 	queue.push node
@@ -114,15 +73,9 @@ def lo(node)
 	end
 end
 
-$inorder_array = "abcdefghijklmno".split("")
+$inorder_array = "dbeafcg".split("")
 mid = (0 + $inorder_array.size - 1)/2
 value = $inorder_array[mid]
 root = Btnode.new(value)
 func(root,mid,0,($inorder_array.size - 1))
-inorder(root)
-puts
-preorder(root)
-puts
-level_order_w(root)
-puts
-#lo(root)
+Bstree.new.level_order_w(root)
