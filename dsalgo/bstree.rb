@@ -66,8 +66,51 @@ class Bstree
 		end
 	end
 
-end
+	def level_order(queue,depth)
+		level_nodes = []
+		justify = 100 - (2**(depth))
+		while(not queue.empty?)
+			node = queue.pop
+			level_nodes.unshift node
+		end
+		print " "*justify
+		level_nodes.each do |node| 
+			print node.data
+			print " "
+		end
+		level_nodes.each do |node|
+			if node.data == "X"
+				next
+			end
+			if node.left
+				queue.push node.left  
+			else
+				nil_node = Btnode.new("X")
+				queue.push nil_node 
+			end
+			if node.right
+				queue.push node.right  
+			else
+				nil_node = Btnode.new("X")
+				queue.push nil_node 
+			end
+		end
+	end
+	def level_order_w(node)
+		queue = []
+		queue.push node
+		depth = 0
+		while (not queue.empty?)
+			puts
+			level_order(queue,depth)
+			depth+=1
+		end
+		puts
+	end
 
+
+end
+=begin
 bstree = Bstree.new
 bstree.add(4)
 bstree.add(3)
@@ -82,3 +125,4 @@ bstree.add(69)
 #bstree.print_inorder(bstree.root)
 puts
 bstree.print_breadthfirst_wrapper
+=end

@@ -1,4 +1,4 @@
-require './btnode.rb'
+require './bstree.rb'
 def find_index_of_value_in_in_array(value,begin_index,end_index)
 	i = begin_index
 	while i <= end_index
@@ -53,16 +53,11 @@ def post_order_traversal(node)
 end
 
 
+$inorder_array = "dbeafcg".split("")
+$preorder_array = "abdecfg".split("")
 $preorder_index = 0
-
-$inorder_array = "bac".split("")
-$preorder_array = "abc".split("")
-root = Btnode.new("a")
-func(root,1,0,2)
-
-#$inorder_array = "dbeafcg".split("")
-#$preorder_array = "abdecfg".split("")
-root = Btnode.new("a")
-#func(root,3,0,6)
-
-post_order_traversal(root)
+root_element = $preorder_array[0]
+root = Btnode.new(root_element)
+root_index_in_in_array = find_index_of_value_in_in_array(root_element,0,($preorder_array.size - 1 ))
+func(root,root_index_in_in_array,0,$preorder_array.size - 1)
+Bstree.new.level_order_w(root)
