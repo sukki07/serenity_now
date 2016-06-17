@@ -65,6 +65,7 @@ class Bstree
 			
 		end
 	end
+
 end
 
 bstree = Bstree.new
