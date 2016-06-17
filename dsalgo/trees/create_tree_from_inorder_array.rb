@@ -73,9 +73,13 @@ def lo(node)
 	end
 end
 
-$inorder_array = "dbeafcg".split("")
+def input_array_for_tree_creation(array)
+#$inorder_array = "dbeafcg".split("")
+$inorder_array = array
 mid = (0 + $inorder_array.size - 1)/2
 value = $inorder_array[mid]
 root = Btnode.new(value)
 func(root,mid,0,($inorder_array.size - 1))
-Bstree.new.level_order_w(root)
+#Bstree.new.level_order_w(root)
+return root
+end
