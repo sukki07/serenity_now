@@ -7,6 +7,7 @@ import java.net.Socket;
 
 public class MiniQClientHandler implements Runnable {
 	private Socket clientSocket;
+	private TransferProtocol protocol;
 	
 	public MiniQClientHandler(Socket clientSocket) {
 		this.clientSocket = clientSocket;
@@ -18,7 +19,8 @@ public class MiniQClientHandler implements Runnable {
 			BufferedReader in = new BufferedReader(	new InputStreamReader(clientSocket.getInputStream()));
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			String input = in.readLine();
-			out.println(input.toUpperCase());
+			String output = protocol.parse(input)
+			out.println(output);
 		} catch (IOException e) {
 
 

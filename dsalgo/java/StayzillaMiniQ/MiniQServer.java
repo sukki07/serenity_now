@@ -12,6 +12,25 @@ public class MiniQServer {
 		initializeMapForAllAvailableQueue()
 	}
 
+	public MiniQ synchronized createGetQueue(String queueName)
+	{
+		MiniQ queue = mapForAllAvailableQueues.get(queueName);
+		if ( queue!= null)
+		{
+			return  queue;
+		}
+		else
+		{
+
+			//later read from config QueueType
+			String queueType = "InMemoryQueue";
+			MiniQ queue = InMemoryQueue.createQueue(queueName);
+			mapForAllAvailableQueues.put(queueName,queue);
+		}
+		
+	}
+
+
 	public static void main(String[] args) throws Exception {
 		ServerSocket listener = new ServerSocket(9898);
 		try {

@@ -5,11 +5,21 @@ public class InMemoryQueue implements MiniQ
 	private ConcurrentLinkedQueue<Message> visibleMessages;
 	private HashMap<String,Message> invisibleMessages;
 	private int enqueueCount = 0;
-	
-	public InMemoryQueue()
+	private String queueName;
+
+	public String getQueueName()
 	{
-		visibleMessages = new LinkedBlockingQueue<Message>();
-		invisibleMessages = new HashMap<String,Message>();
+		return queueName;
+	}
+	public MiniQ createQueue(String queueName)
+	{
+		return (MiniQ)(new InMemoryQueue(queueName));
+	}
+	private InMemoryQueue(String queueName)
+	{
+		this.queueName = queueName;
+		this.visibleMessages = new LinkedBlockingQueue<Message>();
+		this.invisibleMessages = new HashMap<String,Message>();
 	}
 
 	public String synchronized enqueue(Message msg)
