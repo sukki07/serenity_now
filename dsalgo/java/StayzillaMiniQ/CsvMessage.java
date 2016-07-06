@@ -4,10 +4,25 @@ public class CsvMessage implements Message{
 	{
 		this.content = content;
 	}
-	public String getMessageId();
-	public String setMessageId();
-	public Object getMessageContent();
-	public Integer getMessageVisibility();
-	public void setMessageVisibility();
+	public String getMessageId()
+	{
+		return "";
+	}
+	public String setMessageId(int id)
+	{
+		return "";
+	}
+	public Object getMessageContent()
+	{
+		
+		return "";
+	}
+	public Integer getMessageVisibility()
+	{
+		return 1;
+	}
+	public void setMessageVisibility()
+	{
+	}
 
 }

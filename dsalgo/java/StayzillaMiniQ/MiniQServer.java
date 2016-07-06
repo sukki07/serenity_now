@@ -1,48 +1,55 @@
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.IOException;
 
 public class MiniQServer {
-	private HashMap<String,MiniQ> mapForAllAvailableQueues;
-	private initializeMapForAllAvailableQueue()
+	private ServerSocket clientSocketListener;
+	private int serverPort;
+	public MiniQServer(port)
 	{
-		this.mapForAllAvailableQueues = new HashMap();
-	}
-
-	public MiniQServer(){
-		initializeMapForAllAvailableQueue()
-	}
-
-	public MiniQ synchronized createGetQueue(String queueName)
-	{
-		MiniQ queue = mapForAllAvailableQueues.get(queueName);
-		if ( queue!= null)
-		{
-			return  queue;
+		try{
+			this.serverPort = port;
+			clientSocketListener = new ServerSocket(port);
 		}
-		else
+		catch(IOException e)
 		{
 
-			//later read from config QueueType
-			String queueType = "InMemoryQueue";
-			MiniQ queue = InMemoryQueue.createQueue(queueName);
-			mapForAllAvailableQueues.put(queueName,queue);
 		}
-		
+
 	}
-
-
-	public static void main(String[] args) throws Exception {
-		ServerSocket listener = new ServerSocket(9898);
+	public void start()
+	{
 		try {
 			while (true) {
-				Socket clientSocket = listener.accept();
-				MiniQClientHandler miniQClientHandler = new MiniQClientHandler(clientSocket);
+				Socket clientSocket = clientSocketListener.accept();
+				if (serverPort == 80)
+				{
+					TcpProtocol protocol = new HTTPProtocol(clientSocket);	
+				}
+				else
+				{
+					TcpProtocol protocol = new CsvProtocol(clientSocket);	
+				}
+
+				MiniQClientApplicationHandler miniQClientHandler = new MiniQClientApplicationHandler(protocol);
 				Thread clientThread = new Thread(miniQClientHandler);
 				clientThread.start();               
+			}
+
+		} 
+		catch(IOException e)
+		{
+
+		}
+		finally {
+			try{
+				clientSocketListener.close();
+			}
+			catch(IOException e)
+			{
 
 			}
-		} finally {
-			listener.close();
 		}
+
 	}
 }

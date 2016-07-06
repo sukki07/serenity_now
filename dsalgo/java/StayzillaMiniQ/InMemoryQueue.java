@@ -1,4 +1,5 @@
-import java.util.concurrent;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.HashMap;
 
 public class InMemoryQueue implements MiniQ
 {
@@ -15,31 +16,53 @@ public class InMemoryQueue implements MiniQ
 	{
 		return (MiniQ)(new InMemoryQueue(queueName));
 	}
-	private InMemoryQueue(String queueName)
+
+	public InMemoryQueue(String queueName)
 	{
 		this.queueName = queueName;
-		this.visibleMessages = new LinkedBlockingQueue<Message>();
+		this.visibleMessages = new ConcurrentLinkedQueue<Message>();
 		this.invisibleMessages = new HashMap<String,Message>();
 	}
 
-	public String synchronized enqueue(Message msg)
+	public synchronized String enqueue(Message msg)
 	{
 		enqueueCount+=1;
 		msg.setMessageId(enqueueCount);
 		visibleMessages.offer(msg);
+		return "";
 	}
 
-	public String synchronized dequeue(String msgId)
+	public synchronized Message dequeue()
 	{
 		Message msg = visibleMessages.poll();
-		if(!msg==null)
+		String msgId = msg.getMessageId();
+		if(msg!=null)
 		{
 			invisibleMessages.put(msgId,msg);
+			return msg; 
 		}
 		else
 		{
-			return "QUEUEISEMPTY";
+			return null;
 		}
 	}
+	
+	public synchronized Message deleteById(String id)
+	{
+		Message msg = visibleMessages.poll();
+		String msgId = msg.getMessageId();
+		if(msg!=null)
+		{
+			invisibleMessages.put(msgId,msg);
+			return msg; 
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+
+
 
 }

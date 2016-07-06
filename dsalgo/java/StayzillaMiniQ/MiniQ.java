@@ -1,7 +1,7 @@
 public interface MiniQ
 {
-	public String synchronized enqueue(String msg);
-	public String synchronized dequeue(String msgId);
+	public String enqueue(Message msg);
+	public Message dequeue();
 	public String getQueueName();
 	public MiniQ createQueue(String queueName);
 }
