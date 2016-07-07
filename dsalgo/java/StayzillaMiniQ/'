@@ -1,8 +1,11 @@
 import java.util.HashMap;
 public class MiniQAdmin {
 	private static MiniQAdmin admin = new MiniQAdmin();
+	
 	private MiniQServer server;
+	
 	private Map<String,MiniQ> mapForAllAvailableQueues;
+	
 	private MiniQAdmin()
 	{
 		server  = new MiniQServer();;
@@ -17,6 +20,7 @@ public class MiniQAdmin {
 		return server;
 	}
 
+
 	public ApplicationObject getResponseObjectForRequestObject(ApplicationObject applicationRequestObject)
 	{
 		String queueName = applicationRequestObject.getQueueName();
@@ -29,19 +33,7 @@ public class MiniQAdmin {
 		}
 		else if (applicationRequestObject instance_of DeleteQueueRequest)
 		{
-			boolean wasDeleted = deleteQueue(queueName);
-			ApplicationObject deleteQueueResponse = new DeleteQueueResponse();  
-			if (wasDeleted == true)
-			{
-			deleteQueueResponse.setStatus = true;
-			}
-			else
-			{
-			deleteQueueResponse.setStatus = false;
-			deleteQueueResponse.setReason = "No Such Queue";
-			}
-			return deleteQueueResponse;
-
+			deleteQueue(queueName);
 		}
 		else if (applicationRequestObject instance_of PushToQueueRequest)
 		{
@@ -65,21 +57,13 @@ public class MiniQAdmin {
 		{
 			MiniQ queueObj = createGetQueue(String queueName);
 			String msgId = DeleteFromQueueRequest.getMessageId();
-			boolean wasDeleted = queueObj.deleteById(msgId);
-			ApplicationObject deleteFromQueueResponse = new DeleteFromQueueResponse();  
-			if (wasDeleted == true)
-			{
-				deleteFromQueueResponse.setStatus = true;
-			}
-			else
-			{
-				deleteFromQueueResponse.setStatus = false;
-				deleteFromQueueResponse.setReason = "Message already timedout";
-			}
-			return deleteFromQueueResponse;
+			queueObj.deleteById(msgId);
+		}
+		else
+		{
 
 		}
-
+	
 	}
 
 

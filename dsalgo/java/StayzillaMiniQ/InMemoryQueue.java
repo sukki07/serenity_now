@@ -12,6 +12,7 @@ public class InMemoryQueue implements MiniQ
 	{
 		return queueName;
 	}
+	
 	public MiniQ createQueue(String queueName)
 	{
 		return (MiniQ)(new InMemoryQueue(queueName));
