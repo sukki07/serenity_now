@@ -33,13 +33,15 @@ public class InMemoryQueue implements MiniQ
 		return "";
 	}
 
-	public synchronized Message dequeue()
+	public synchronized ClientMessage dequeue()
 	{
 		Message msg = visibleMessages.poll();
 		String msgId = msg.getMessageId();
 		if(msg!=null)
 		{
 			invisibleMessages.put(msgId,msg);
+			clientMessage = new ClientMessage();
+			//createClientMessage
 			return msg; 
 		}
 		else

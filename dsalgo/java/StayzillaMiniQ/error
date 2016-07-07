@@ -1,0 +1,47 @@
+InMemoryQueue.java:4: error: InMemoryQueue is not abstract and does not override abstract method enqueue(String) in MiniQ
+public class InMemoryQueue implements MiniQ
+       ^
+InMemoryQueue.java:43: error: cannot find symbol
+			clientMessage = new ClientMessage();
+			^
+  symbol:   variable clientMessage
+  location: class InMemoryQueue
+InMemoryQueue.java:45: error: incompatible types: Message cannot be converted to ClientMessage
+			return msg; 
+			       ^
+MiniQAdmin.java:23: error: cannot find symbol
+		String queueName = applicationRequestObject.getQueueName();
+		                                           ^
+  symbol:   method getQueueName()
+  location: variable applicationRequestObject of type ApplicationRequest
+MiniQAdmin.java:49: error: non-static method getMessageContent() cannot be referenced from a static context
+			String messageContent = PushToQueueRequest.getMessageContent();
+			                                          ^
+MiniQAdmin.java:61: error: cannot find symbol
+			popFromQueueResponse.setClientMessage(msg);
+			                    ^
+  symbol:   method setClientMessage(ClientMessage)
+  location: variable popFromQueueResponse of type ApplicationResponse
+MiniQAdmin.java:67: error: non-static method getMessageId() cannot be referenced from a static context
+			String msgId = DeleteFromQueueRequest.getMessageId();
+			                                     ^
+MiniQAdmin.java:68: error: cannot find symbol
+			boolean wasDeleted = queueObj.deleteById(msgId);
+			                             ^
+  symbol:   method deleteById(String)
+  location: variable queueObj of type MiniQ
+MiniQAdmin.java:88: error: cannot find symbol
+			 mapForAllAvailableQueues.set(queueName,null);
+			                         ^
+  symbol:   method set(String,<null>)
+  location: variable mapForAllAvailableQueues of type Map<String,MiniQ>
+MiniQAdmin.java:115: error: non-static method getInstance() cannot be referenced from a static context
+		admin = MiniQAdmin.getInstance();
+		                  ^
+MiniQClientApplicationHandler.java:18: error: non-static method getInstance() cannot be referenced from a static context
+			MiniQAdmin admin = MiniQAdmin.getInstance();
+			                             ^
+MiniQClientApplicationHandler.java:19: error: incompatible types: MiniQApplicationApi cannot be converted to ApplicationRequest
+			ApplicationRequest applicationRequestObject = transportProtocol.processSocketInput();
+			                                                                                  ^
+12 errors

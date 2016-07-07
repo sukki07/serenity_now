@@ -5,17 +5,16 @@ import java.io.IOException;
 public class MiniQServer {
 	private ServerSocket clientSocketListener;
 	private int serverPort;
-	public MiniQServer(port)
+	public void setPort(int port)
 	{
+		this.serverPort = port;
 		try{
-			this.serverPort = port;
 			clientSocketListener = new ServerSocket(port);
 		}
 		catch(IOException e)
 		{
 
 		}
-
 	}
 	public void start()
 	{
@@ -24,16 +23,15 @@ public class MiniQServer {
 				Socket clientSocket = clientSocketListener.accept();
 				if (serverPort == 80)
 				{
-					TcpProtocol protocol = new HTTPProtocol(clientSocket);	
+					//TcpProtocol protocol = new HTTPProtocol(clientSocket);	
 				}
 				else
 				{
-					TcpProtocol protocol = new CsvProtocol(clientSocket);	
+					TcpProtocol protocol = new MiniQOverTcp(clientSocket);	
+					MiniQClientApplicationHandler miniQClientHandler = new MiniQClientApplicationHandler(protocol);
+					Thread clientThread = new Thread(miniQClientHandler);
+					clientThread.start();               
 				}
-
-				MiniQClientApplicationHandler miniQClientHandler = new MiniQClientApplicationHandler(protocol);
-				Thread clientThread = new Thread(miniQClientHandler);
-				clientThread.start();               
 			}
 
 		} 

@@ -8,16 +8,16 @@ import java.util.HashMap;
 
 public class MiniQClientApplicationHandler implements Runnable {
 	private TcpProtocol transportProtocol;
-	public MiniQClientHandler(TcpProtocol transportProtocol) {
+	public  MiniQClientApplicationHandler(TcpProtocol transportProtocol) {
 		this.transportProtocol = transportProtocol;
 	}
 
 	public void run() 
 	{
 		try {
-			admin = MiniQAdmin.getInstance();
-			ApplicationRequestObject applicationRequestObject = transportProtocol.processSocketInput();
-			ApplicationResponseObject applicationResponseObject  = admin.getResponseObjectForRequestObject(applicationRequestObject);
+			MiniQAdmin admin = MiniQAdmin.getInstance();
+			ApplicationRequest applicationRequestObject = transportProtocol.processSocketInput();
+			ApplicationResponse applicationResponseObject  = admin.getResponseObjectForRequestObject(applicationRequestObject);
 			transportProtocol.processSocketOutput(applicationResponseObject);
 		} catch (IOException e) {
 

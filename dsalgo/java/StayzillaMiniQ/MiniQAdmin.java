@@ -1,11 +1,12 @@
 import java.util.HashMap;
+import java.util.Map;
 public class MiniQAdmin {
 	private static MiniQAdmin admin = new MiniQAdmin();
 	private MiniQServer server;
 	private Map<String,MiniQ> mapForAllAvailableQueues;
 	private MiniQAdmin()
 	{
-		server  = new MiniQServer();;
+		server  = new MiniQServer();
 		mapForAllAvailableQueues = new HashMap<String,MiniQ>();
 	}
 	public MiniQAdmin getInstance()
@@ -17,69 +18,65 @@ public class MiniQAdmin {
 		return server;
 	}
 
-	public ApplicationObject getResponseObjectForRequestObject(ApplicationObject applicationRequestObject)
+	public ApplicationResponse getResponseObjectForRequestObject(ApplicationRequest applicationRequestObject)
 	{
 		String queueName = applicationRequestObject.getQueueName();
-		if (applicationRequestObject instance_of CreateQueueRequest)
+		if (applicationRequestObject instanceof CreateQueueRequest)
 		{
-			MiniQ queueObj = createGetQueue(String queueName);
-			ApplicationObject createQueueResponse = new CreateQueueResponse();  
-			createQueueResponse.setStatus = true;
+			MiniQ queueObj = createGetQueue(queueName);
+			ApplicationResponse createQueueResponse = new CreateQueueResponse();  
+			createQueueResponse.setStatus(true);
 			return createQueueResponse;
 		}
-		else if (applicationRequestObject instance_of DeleteQueueRequest)
+		else if (applicationRequestObject instanceof DeleteQueueRequest)
 		{
 			boolean wasDeleted = deleteQueue(queueName);
-			ApplicationObject deleteQueueResponse = new DeleteQueueResponse();  
+			ApplicationResponse deleteQueueResponse = new DeleteQueueResponse();  
 			if (wasDeleted == true)
 			{
-			deleteQueueResponse.setStatus = true;
+			deleteQueueResponse.setStatus(true);
 			}
 			else
 			{
-			deleteQueueResponse.setStatus = false;
-			deleteQueueResponse.setReason = "No Such Queue";
+			deleteQueueResponse.setStatus(false);
 			}
 			return deleteQueueResponse;
 
 		}
-		else if (applicationRequestObject instance_of PushToQueueRequest)
+		else if (applicationRequestObject instanceof PushToQueueRequest)
 		{
-			MiniQ queueObj = createGetQueue(String queueName);
-			Message newMessage = PushToQueueRequest.getMessage();
-			queueObj.enqueue(newMessage);
-			ApplicationObject pushToQueueResponse = new PushToQueueResponse();  
-			pushToQueueResponse.setStatus = true;
+			MiniQ queueObj = createGetQueue(queueName);
+			String messageContent = PushToQueueRequest.getMessageContent();
+			queueObj.enqueue(messageContent);
+			ApplicationResponse pushToQueueResponse = new PushToQueueResponse();  
+			pushToQueueResponse.setStatus(true);
 			return pushToQueueResponse;
 		}
-		else if (applicationRequestObject instance_of PopFromQueueRequest)
+		else if (applicationRequestObject instanceof PopFromQueueRequest)
 		{
-			MiniQ queueObj = createGetQueue(String queueName);
-			Message msg = queueObj.dequeue();
-			ApplicationObject popFromQueueResponse = new PopFromQueueResponse();  
-			popFromQueueResponse.setStatus = true;
-			popFromQueueResponse.setMessage = msg;
+			MiniQ queueObj = createGetQueue(queueName);
+			ClientMessage msg = queueObj.dequeue();
+			ApplicationResponse popFromQueueResponse = new PopFromQueueResponse();  
+			popFromQueueResponse.setStatus(true);
+			popFromQueueResponse.setClientMessage(msg);
 			return popFromQueueResponse;
 		}
-		else if (applicationRequestObject instance_of DeleteFromQueueRequest)
+		else if (applicationRequestObject instanceof DeleteFromQueueRequest)
 		{
-			MiniQ queueObj = createGetQueue(String queueName);
+			MiniQ queueObj = createGetQueue(queueName);
 			String msgId = DeleteFromQueueRequest.getMessageId();
 			boolean wasDeleted = queueObj.deleteById(msgId);
-			ApplicationObject deleteFromQueueResponse = new DeleteFromQueueResponse();  
+			ApplicationResponse deleteFromQueueResponse = new DeleteFromQueueResponse();  
 			if (wasDeleted == true)
 			{
-				deleteFromQueueResponse.setStatus = true;
+				deleteFromQueueResponse.setStatus(true);
 			}
 			else
 			{
-				deleteFromQueueResponse.setStatus = false;
-				deleteFromQueueResponse.setReason = "Message already timedout";
+				deleteFromQueueResponse.setStatus(false);
 			}
 			return deleteFromQueueResponse;
-
 		}
-
 	}
 
 
@@ -96,8 +93,6 @@ public class MiniQAdmin {
 			return false;
 		}
 	}
-
-
 	private synchronized MiniQ createGetQueue(String queueName)
 	{
 		MiniQ queue = mapForAllAvailableQueues.get(queueName);
@@ -115,11 +110,12 @@ public class MiniQAdmin {
 		}
 
 	}
-
 	public static void main(String[] args) {
 		int port = Integer.parseInt(args[0]);
 		admin = MiniQAdmin.getInstance();
-		admin.getServer().start(port);
+		MiniQServer server = admin.getServer();
+		server.setPort(port);
+		server.start();
 	}
 }
 
