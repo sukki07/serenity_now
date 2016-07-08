@@ -5,4 +5,8 @@ public class ApplicationResponse extends MiniQApplicationApi
 	{
 		this.status = status;
 	}
+	public boolean getStatus()
+	{
+		return status;
+	}
 }

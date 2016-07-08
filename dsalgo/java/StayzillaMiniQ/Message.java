@@ -1,7 +1,10 @@
 public interface Message{
-	public String getMessageId();
-	public String setMessageId(int number);
-	public Object getMessageContent();
-	public Integer getMessageVisibility();
-	public void setMessageVisibility();
+	public int getMessageId();
+	public void setMessageId(int number);
+	public String getMessageContent();
+	public void setMessageContent(String content);
+	public long getInvisibilityMinutes();
+	public void setInvisibilityMinutes(long minutes);
+	public long getEnqueueTime();
+	public void setEnqueueTime(long enqueueTime);
 }

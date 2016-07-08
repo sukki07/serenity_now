@@ -14,13 +14,13 @@ public class MiniQClientApplicationHandler implements Runnable {
 
 	public void run() 
 	{
-		try {
-			MiniQAdmin admin = MiniQAdmin.getInstance();
-			ApplicationRequest applicationRequestObject = transportProtocol.processSocketInput();
-			ApplicationResponse applicationResponseObject  = admin.getResponseObjectForRequestObject(applicationRequestObject);
-			transportProtocol.processSocketOutput(applicationResponseObject);
-		} catch (IOException e) {
-
-		}
+		String threadName = Thread.currentThread().getName();
+		System.out.println(String.format("-----RequestBegin----%s",threadName));
+		MiniQAdmin admin = MiniQAdmin.getInstance();
+		MiniQApplicationApi applicationRequestObject = transportProtocol.processSocketInput();
+		MiniQApplicationApi applicationResponseObject  = admin.getResponseObjectForRequestObject((ApplicationRequest)applicationRequestObject);
+		transportProtocol.processSocketOutput(applicationResponseObject);
+		System.out.println(String.format("-----RequestEnd----%s",threadName));
 	}
+
 }

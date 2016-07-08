@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 public class MiniQAdmin {
-	private static MiniQAdmin admin = new MiniQAdmin();
+	private static final MiniQAdmin admin = new MiniQAdmin();
 	private MiniQServer server;
 	private Map<String,MiniQ> mapForAllAvailableQueues;
 	private MiniQAdmin()
@@ -9,7 +9,7 @@ public class MiniQAdmin {
 		server  = new MiniQServer();
 		mapForAllAvailableQueues = new HashMap<String,MiniQ>();
 	}
-	public MiniQAdmin getInstance()
+	public static MiniQAdmin getInstance()
 	{
 		return admin;
 	}
@@ -20,13 +20,15 @@ public class MiniQAdmin {
 
 	public ApplicationResponse getResponseObjectForRequestObject(ApplicationRequest applicationRequestObject)
 	{
+		System.out.println("processing request");
+		ApplicationResponse response = null; 
 		String queueName = applicationRequestObject.getQueueName();
 		if (applicationRequestObject instanceof CreateQueueRequest)
 		{
 			MiniQ queueObj = createGetQueue(queueName);
 			ApplicationResponse createQueueResponse = new CreateQueueResponse();  
 			createQueueResponse.setStatus(true);
-			return createQueueResponse;
+			response = createQueueResponse;
 		}
 		else if (applicationRequestObject instanceof DeleteQueueRequest)
 		{
@@ -40,31 +42,31 @@ public class MiniQAdmin {
 			{
 			deleteQueueResponse.setStatus(false);
 			}
-			return deleteQueueResponse;
+			response = deleteQueueResponse;
 
 		}
 		else if (applicationRequestObject instanceof PushToQueueRequest)
 		{
 			MiniQ queueObj = createGetQueue(queueName);
-			String messageContent = PushToQueueRequest.getMessageContent();
+			String messageContent = ((PushToQueueRequest)applicationRequestObject).getMessageContent();
 			queueObj.enqueue(messageContent);
 			ApplicationResponse pushToQueueResponse = new PushToQueueResponse();  
 			pushToQueueResponse.setStatus(true);
-			return pushToQueueResponse;
+			response = pushToQueueResponse;
 		}
 		else if (applicationRequestObject instanceof PopFromQueueRequest)
 		{
 			MiniQ queueObj = createGetQueue(queueName);
 			ClientMessage msg = queueObj.dequeue();
-			ApplicationResponse popFromQueueResponse = new PopFromQueueResponse();  
+			PopFromQueueResponse popFromQueueResponse = new PopFromQueueResponse();  
 			popFromQueueResponse.setStatus(true);
 			popFromQueueResponse.setClientMessage(msg);
-			return popFromQueueResponse;
+			response = popFromQueueResponse;
 		}
 		else if (applicationRequestObject instanceof DeleteFromQueueRequest)
 		{
 			MiniQ queueObj = createGetQueue(queueName);
-			String msgId = DeleteFromQueueRequest.getMessageId();
+			int msgId = ((DeleteFromQueueRequest)applicationRequestObject).getMessageId();
 			boolean wasDeleted = queueObj.deleteById(msgId);
 			ApplicationResponse deleteFromQueueResponse = new DeleteFromQueueResponse();  
 			if (wasDeleted == true)
@@ -75,8 +77,10 @@ public class MiniQAdmin {
 			{
 				deleteFromQueueResponse.setStatus(false);
 			}
-			return deleteFromQueueResponse;
+			response = deleteFromQueueResponse;
 		}
+		return response;
+
 	}
 
 
@@ -85,7 +89,7 @@ public class MiniQAdmin {
 		MiniQ queue = mapForAllAvailableQueues.get(queueName);
 		if ( queue!= null)
 		{
-			 mapForAllAvailableQueues.set(queueName,null);
+			 mapForAllAvailableQueues.put(queueName,null);
 			 return true;
 		}
 		else
@@ -103,6 +107,7 @@ public class MiniQAdmin {
 		else
 		{
 			//later read from config QueueType
+			System.out.println("Creating queue");
 			String queueType = "InMemoryQueue";
 			queue = new InMemoryQueue(queueName);
 			mapForAllAvailableQueues.put(queueName,queue);
@@ -112,8 +117,8 @@ public class MiniQAdmin {
 	}
 	public static void main(String[] args) {
 		int port = Integer.parseInt(args[0]);
-		admin = MiniQAdmin.getInstance();
-		MiniQServer server = admin.getServer();
+		MiniQAdmin adminRef = MiniQAdmin.getInstance();
+		MiniQServer server = adminRef.getServer();
 		server.setPort(port);
 		server.start();
 	}

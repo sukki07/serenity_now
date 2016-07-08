@@ -13,6 +13,7 @@ public class MiniQServer {
 		}
 		catch(IOException e)
 		{
+			e.printStackTrace(System.out);
 
 		}
 	}
@@ -21,22 +22,16 @@ public class MiniQServer {
 		try {
 			while (true) {
 				Socket clientSocket = clientSocketListener.accept();
-				if (serverPort == 80)
-				{
-					//TcpProtocol protocol = new HTTPProtocol(clientSocket);	
-				}
-				else
-				{
-					TcpProtocol protocol = new MiniQOverTcp(clientSocket);	
-					MiniQClientApplicationHandler miniQClientHandler = new MiniQClientApplicationHandler(protocol);
-					Thread clientThread = new Thread(miniQClientHandler);
-					clientThread.start();               
-				}
+				TcpProtocol protocol = new MiniQOverTcp(clientSocket);	
+				MiniQClientApplicationHandler miniQClientHandler = new MiniQClientApplicationHandler(protocol);
+				Thread clientThread = new Thread(miniQClientHandler);
+				clientThread.start();               
 			}
 
 		} 
 		catch(IOException e)
 		{
+			e.printStackTrace(System.out);
 
 		}
 		finally {
@@ -45,7 +40,7 @@ public class MiniQServer {
 			}
 			catch(IOException e)
 			{
-
+				e.printStackTrace(System.out);
 			}
 		}
 

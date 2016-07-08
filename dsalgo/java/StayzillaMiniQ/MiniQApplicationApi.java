@@ -1,4 +1,4 @@
-public class MiniQApplicationApi
+public class MiniQApplicationApi implements java.io.Serializable 
 {
 }
 

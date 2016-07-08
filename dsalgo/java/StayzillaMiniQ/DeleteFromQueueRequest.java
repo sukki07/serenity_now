@@ -1,9 +1,14 @@
 public class DeleteFromQueueRequest extends ApplicationRequest
 {
-	private String messageId;
-	public String getMessageId() 
+	private int messageId;
+	public int getMessageId() 
 	{
 		return messageId;
+	}
+	public DeleteFromQueueRequest(String queueName,int id)
+	{
+		super(queueName);
+		this.messageId = id;
 	}
 }
 

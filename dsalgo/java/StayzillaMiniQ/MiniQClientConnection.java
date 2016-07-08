@@ -9,7 +9,6 @@ public class MiniQClientConnection {
 	public MiniQClientConnection() throws IOException 
 	{
 		this.socket = new Socket("127.0.0.1", 9898);
-
 	}
 	public String send(String fromUser) throws IOException 
 	{

@@ -5,5 +5,10 @@ public class PopFromQueueResponse extends ApplicationResponse
 	{
 		this.msg = msg;
 	}
+	public ClientMessage getClientMessage()
+	{
+		return msg;
+	}
+
 
 }
