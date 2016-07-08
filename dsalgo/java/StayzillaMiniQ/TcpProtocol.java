@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.io.IOException;
 public interface TcpProtocol
 {
